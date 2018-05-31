@@ -72,6 +72,9 @@ def parse_data_file(fe_file):
         'rBGMedianSignal']] = df[
         ['gProcessedSignal', 'rProcessedSignal', 'gMedianSignal', 'rMedianSignal', 'gBGMedianSignal',
          'rBGMedianSignal']].astype(float)
+    # Add bit fields to indicate if threshold for median signal has been passed
+    df['gAboveThreshold'] = np.where(df['gMedianSignal'] >= 20000, 1, 0)
+    df['rAboveThreshold'] = np.where(df['rMedianSignal'] >= 20000, 1, 0)
     # Add column identifying the file which the data was imported from:
     df['FE_filename'] = fe_file
     return df
@@ -98,7 +101,7 @@ def import_data(fe_files):
 # identifying the discrepancy.
 def summarise_array_replicates(df, spike_in_probes):
     # Format data
-    summarised_df = pandas.pivot_table(df, values=['gIsSaturated', 'rIsSaturated'],
+    summarised_df = pandas.pivot_table(df, values=['gAboveThreshold', 'rAboveThreshold'],
                                        index=['ProbeName'],
                                        columns=['FE_filename'],
                                        aggfunc=np.sum)
@@ -150,11 +153,11 @@ def plot_values(dataframe, figure_name, directory_path):
     plt.ylabel("Median Signal")
     axarr[0].scatter(dataframe['ProbeName'], dataframe['gMedianSignal'], color='green', marker='_')
     axarr[0].set_ylim([0, 70000])
-    axarr[0].axhline(y=65527, alpha=0.5, dashes=[1, 1], color='grey')
+    axarr[0].axhline(y=20000, alpha=0.5, dashes=[1, 1], color='grey')
     axarr[0].tick_params(axis='y', which='major', labelsize=6)
     axarr[1].scatter(dataframe['ProbeName'], dataframe['rMedianSignal'], color='red', marker='_')
     axarr[1].set_ylim([0, 70000])
-    axarr[1].axhline(y=65527, alpha=0.5, dashes=[1, 1], color='grey')
+    axarr[1].axhline(y=20000, alpha=0.5, dashes=[1, 1], color='grey')
     axarr[1].tick_params(axis='y', which='major', labelsize=6)
     plt.xticks(rotation='vertical')
     # Create space for x labels
