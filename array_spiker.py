@@ -13,6 +13,7 @@ import argparse
 import datetime
 import itertools
 import matplotlib
+matplotlib.use('agg') #To bypass X-server on headless linux server https://stackoverflow.com/questions/35737116/runtimeerror-invalid-display-variable
 import matplotlib.pyplot as plt
 import numpy as np
 import os
