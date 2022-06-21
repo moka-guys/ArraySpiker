@@ -24,7 +24,7 @@ linecache2==1.0.0
 lxml==4.2.1
 matplotlib==2.2.2
 nbformat==4.4.0
-numpy==1.14.2
+numpy==1.22.0
 pandas==0.22.0
 parsel==1.4.0
 plotly==2.5.0
